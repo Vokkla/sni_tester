@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/user/sni-tester/tester"
+	"github.com/Vokkla/sni_tester/tester"
 )
 
 // ExportResult — структура для JSON экспорта

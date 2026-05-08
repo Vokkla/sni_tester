@@ -1,4 +1,4 @@
-module github.com/yourusername/sni-tester
+module github.com/Vokkla/sni_tester
 
 go 1.22
 

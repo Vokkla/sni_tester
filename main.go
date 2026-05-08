@@ -9,10 +9,10 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"github.com/user/sni-tester/config"
-	"github.com/user/sni-tester/output"
-	"github.com/user/sni-tester/sni"
-	"github.com/user/sni-tester/tester"
+	"github.com/Vokkla/sni_tester/config"
+	"github.com/Vokkla/sni_tester/output"
+	"github.com/Vokkla/sni_tester/sni"
+	"github.com/Vokkla/sni_tester/tester"
 )
 
 var cfg = config.DefaultConfig()

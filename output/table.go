@@ -10,7 +10,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
-	"github.com/user/sni-tester/tester"
+	"github.com/Vokkla/sni_tester/tester"
 )
 
 // ColorScheme — набор цветов для вывода
