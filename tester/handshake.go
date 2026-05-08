@@ -72,8 +72,6 @@ func getClientHelloID(fp string) utls.ClientHelloID {
 	switch strings.ToLower(fp) {
 	case "chrome", "chrome120":
 		return utls.HelloChrome_120
-	case "chrome117":
-		return utls.HelloChrome_117
 	case "firefox", "firefox120":
 		return utls.HelloFirefox_120
 	case "firefox105":
