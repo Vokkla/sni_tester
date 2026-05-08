@@ -24,8 +24,8 @@
 ### Сборка из исходников
 
 ```bash
-git clone https://github.com/user/sni-tester
-cd sni-tester
+git clone https://github.com/Vokkla/sni_tester.git
+cd sni_tester
 go mod tidy
 go build -ldflags="-s -w" -o sni-tester .
 ```
