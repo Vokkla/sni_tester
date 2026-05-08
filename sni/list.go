@@ -10,28 +10,16 @@ import (
 	"time"
 )
 
-
-
 // LoadFromFile — загружает список SNI из текстового файла.
-func loadSNIList(cfg *config.Config) ([]string, error) {
-    if _, err := os.Stat(cfg.SNIFile); os.IsNotExist(err) {
-        return nil, fmt.Errorf(
-            "файл SNI не найден: %s\n"+
-            "  Положите sni-candidates.txt рядом с бинарником или укажите путь через --sni-file",
-            cfg.SNIFile,
-        )
-    }
+// Каждый SNI на отдельной строке, строки с # — комментарии.
+func LoadFromFile(path string) ([]string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("не удалось открыть файл %s: %w", path, err)
+	}
+	defer f.Close()
 
-    list, err := sni.LoadFromFile(cfg.SNIFile)
-    if err != nil {
-        return nil, fmt.Errorf("ошибка загрузки %s: %w", cfg.SNIFile, err)
-    }
-    if len(list) == 0 {
-        return nil, fmt.Errorf("файл %s пустой", cfg.SNIFile)
-    }
-
-    color.New(color.FgGreen).Printf("  Загружено %d SNI из %s\n", len(list), cfg.SNIFile)
-    return list, nil
+	return parseLines(f), nil
 }
 
 // LoadFromURL — скачивает список SNI по указанному URL.
@@ -58,15 +46,13 @@ func parseLines(r io.Reader) []string {
 
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
-		// Пропускаем комментарии и пустые строки
 		if line == "" || strings.HasPrefix(line, "#") {
 			continue
 		}
-		// Убираем inline-комментарии
+		// Убираем inline-комментарии вида: example.com # пояснение
 		if idx := strings.Index(line, " #"); idx != -1 {
 			line = strings.TrimSpace(line[:idx])
 		}
-		// Дедупликация
 		lower := strings.ToLower(line)
 		if !seen[lower] {
 			seen[lower] = true
@@ -82,8 +68,8 @@ func MergeLists(lists ...[]string) []string {
 	var result []string
 
 	for _, list := range lists {
-		for _, sni := range list {
-			lower := strings.ToLower(strings.TrimSpace(sni))
+		for _, s := range list {
+			lower := strings.ToLower(strings.TrimSpace(s))
 			if lower != "" && !seen[lower] {
 				seen[lower] = true
 				result = append(result, lower)
@@ -106,8 +92,8 @@ func SaveToFile(path string, snis []string) error {
 	fmt.Fprintln(w, "# Формат: один SNI на строку, строки с # — комментарии")
 	fmt.Fprintln(w)
 
-	for _, sni := range snis {
-		fmt.Fprintln(w, sni)
+	for _, s := range snis {
+		fmt.Fprintln(w, s)
 	}
 	return w.Flush()
 }
